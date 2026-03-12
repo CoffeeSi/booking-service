@@ -7,11 +7,11 @@ from django.forms import ValidationError
 
 class Booking(models.Model):
     room = models.ForeignKey("rooms.Room", on_delete=models.CASCADE)
-    guest = models.ForeignKey("auth.User", on_delete=models.CASCADE)
+    guest = models.ForeignKey("users.User", on_delete=models.CASCADE)
     start_date = models.DateField()
     end_date = models.DateField()
 
-    def clean(self):
+    def clean(self) -> None:
         if not self.room or not self.guest:
             raise ValidationError("Room and guest must be specified")
         if self.start_date is None or self.end_date is None:
@@ -25,5 +25,10 @@ class Booking(models.Model):
         ).exists():
             raise ValidationError("This room is not available for the selected dates")
 
-    def __str__(self):
+    class Meta:
+        indexes = [
+            models.Index(fields=["start_date", "end_date"], name="booking_dates_index"),
+        ]
+
+    def __str__(self) -> str:
         return f"Booking {self.room} | Guest {self.guest.username} | {self.start_date} – {self.end_date}"
