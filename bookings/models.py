@@ -8,8 +8,8 @@ from django.forms import ValidationError
 class Booking(models.Model):
     room = models.ForeignKey("rooms.Room", on_delete=models.CASCADE)
     guest = models.ForeignKey("users.User", on_delete=models.CASCADE)
-    start_date = models.DateField()
-    end_date = models.DateField()
+    start_date = models.DateField(null=False, blank=False)
+    end_date = models.DateField(null=False, blank=False)
 
     def clean(self) -> None:
         if not self.room or not self.guest:
@@ -20,10 +20,21 @@ class Booking(models.Model):
             raise ValidationError("End date must be after start date")
         if self.start_date < timezone.now().date():
             raise ValidationError("Start date cannot be in the past")
-        if Booking.objects.filter(
-            room=self.room, start_date__lt=self.end_date, end_date__gt=self.start_date
-        ).exists():
+
+        if (
+            Booking.objects.filter(
+                room=self.room,
+                start_date__lt=self.end_date,
+                end_date__gt=self.start_date,
+            )
+            .exclude(id=self.id)
+            .exists()
+        ):
             raise ValidationError("This room is not available for the selected dates")
+
+    def save(self, *args, **kwargs) -> None:
+        self.full_clean()
+        super().save(*args, **kwargs)
 
     class Meta:
         indexes = [
