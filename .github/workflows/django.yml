@@ -46,10 +46,11 @@ jobs:
       - name: Run tests
         env:
           DJANGO_SECRET_KEY: test_secret_key
-          POSTGRES_DBNAME: postgres
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_HOST: localhost
-          POSTGRES_PORT: 5432
+          DJANGO_DEBUG: 'True'
+          DB_NAME: postgres
+          DB_USER: postgres
+          DB_PASSWORD: postgres
+          DB_HOST: localhost
+          DB_PORT: 5432
         run: |
           python manage.py test
