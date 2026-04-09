@@ -1,0 +1,11 @@
+groups:
+  - name: booking-service-alerts
+    rules:
+      - alert: HighErrorRate
+        expr: up
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High error rate on booking service"
+          description: "More than 5% of requests are resulting in 5xx errors."

@@ -3,8 +3,9 @@ attrs==25.4.0
 black==26.3.1
 click==8.3.1
 colorama==0.4.6
-Django==6.0.3
+Django==5.2.13
 django-filter==25.2
+django-prometheus==2.4.1
 djangorestframework==3.16.1
 drf-spectacular==0.29.0
 gunicorn==25.1.0
@@ -15,6 +16,7 @@ mypy_extensions==1.1.0
 packaging==26.0
 pathspec==1.0.4
 platformdirs==4.9.4
+prometheus_client==0.24.1
 psycopg2==2.9.11
 python-dotenv==1.2.2
 pytokens==0.4.1
